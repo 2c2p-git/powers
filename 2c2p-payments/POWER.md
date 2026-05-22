@@ -1,8 +1,8 @@
 ---
 name: "2C2P Payments"
 displayName: "2C2P Payments"
-description: "Integration guide for 2C2P. Accept cards, digital wallets, QR payments, and alternative payment methods across Southeast Asia via Hosted Payment Page, Direct API, Mobile SDK, Web SDK, QuickPay links, and shopping cart plugins."
-keywords: ["2c2p", "payments", "gateway", "api", "integration", "quickpay", "paymentlink", "checkout", "pgw", "sdk"]
+description: "Integration guide for 2C2P. Accept cards, digital wallets, QR payments, and alternative payment methods across Southeast Asia via Hosted Payment Page, Direct API, Web SDK, QuickPay links, and shopping cart plugins."
+keywords: ["2c2p", "payments", "gateway", "api", "integration", "quickpay", "paymentlink", "checkout", "pgw"]
 author: "2C2P By Antom"
 ---
 
@@ -48,6 +48,22 @@ Based on what they want to do, load the appropriate steering file and guide impl
 **If the user is unsure or wants the simplest option, recommend QuickPay Link first** — it's one API call to generate a payment link, no frontend UI needed, works from any backend language.
 
 **For QuickPay Link integration**, load steering file: `quickpay.md`
+
+### 5. Collect URLs for Redirect API Integration
+
+**When the user chooses Redirect API (Hosted Payment Page) or you recommend it**, you **MUST** ask for the following URLs before proceeding with implementation:
+
+1. **Frontend URL** — The URL where the customer will be redirected after payment completion (success/failure page).
+2. **Backend URL** — The webhook/callback URL where 2C2P will send payment notifications (backend-to-backend).
+
+Ask:
+> "To configure the Redirect API integration, I need two URLs:
+> 1. **Frontend URL** — Where should customers be redirected after payment? (e.g., `https://yoursite.com/payment/complete`)
+> 2. **Backend URL** — Where should 2C2P send payment notifications? (e.g., `https://yoursite.com/api/payment/notify`)
+>
+> ⚠️ Both URLs must be **publicly accessible** — 2C2P's servers need to reach them over the internet."
+
+**Do NOT proceed with code generation until both URLs are provided.** If the user provides a localhost or private network URL, warn them that it will not work in sandbox or production — 2C2P cannot reach private addresses. Suggest using a tunneling tool (e.g., ngrok) for local development if needed.
 
 ---
 
@@ -315,6 +331,10 @@ Use these test cards in sandbox:
 3. Customer completes payment on 2C2P page
 4. Receive backend notification
 5. Redirect customer back to your site
+
+**Prerequisites — collect from user before implementation:**
+- **Frontend URL** (redirect after payment) — must be publicly accessible
+- **Backend URL** (webhook for payment notifications) — must be publicly accessible
 
 **Use when:**
 - You want the fastest integration
